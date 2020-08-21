@@ -17,49 +17,35 @@
             <h2>Login</h2>
         </div>
         <div>
-            <input type="text" name="userName" id="userName" placeholder="User Name" required style="height: 40px; font-size: 15px;">
+            <input type="text" id="userName" placeholder="User Name" required style="height: 40px; font-size: 15px;">
         </div>
         <div style="padding-top: 5%;">
-            <input type="password" name="password" id="password" placeholder="Password" required style="height: 40px; font-size: 15px;">
+            <input type="password" id="password" placeholder="Password" required style="height: 40px; font-size: 15px;">
         </div>
         <div style="padding-top: 2%;">
-            <input type="button" name="login" id="login" value="Login" style="width: 115px; height: 35px; border-radius: 10px; background-color: navy; color: white; border-color: white;">
+            <input onClick="userNameMatch(userName)" type="button" id="login" value="Login" style="width: 115px; height: 35px; border-radius: 10px; background-color: navy; color: white; border-color: white;">
         </div>
     </div></form>
 </body>
 
 <script>
-    
-    function login() {
-
-        passwordKey=$('#password').val();
-        userNameKey=$('#userName').val();
-
-        if (userNameKey == ""){
-
-	  alert('Sorry, You must enter a user name');
-	  return true;
-} 
-  
-  if (passcode == ""){
-
-    alert('Sorry, Wrong password');
+    function userNameMatch(userName) {
+    db.transaction(function (tx) { 
+        tx.executeSql(
+            'SELECT * FROM user WHERE userName=? LIMIT 1',
+            [userName], 
+            function (tx, result) { 
+                if(result.rows.length){
+                    // user found
+                    alert("User name correct - ", result.rows[0]);
+                }
+                else {
+                    // email does not exists
+                    alert("User name not correct");
+                }
+            },
+            null
+        ); 
+    });
 }
-  
-  else{  
-
-	  if (passcode==passwordKey){
-
-	      gotoScreen('#m1-welcome', phoneui.transitions.SlideLeft);
-}
-	      else{
-
-	        alert('Sorry, Wrong password');
-}
-}
-}	  
-
-
-    passcode = ""; 
-
 </script>
